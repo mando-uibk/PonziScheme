@@ -1,0 +1,99 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{# ****************************************************************************************************************** #}
+{# *** STYLES *** #}
+{# ****************************************************************************************************************** #}
+{% block styles %}
+<link href="{% static 'questionnaire/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+<script></script>
+{% endblock %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{% block title %}
+Questionnaire
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
+{% block content %}
+
+
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <!-- Progress Bar App-->
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <label style="display: none">
+            Experimental task 2 of 2
+        </label>
+        <div class="progress" style="display: none">
+            <div class="progress-bar-task" role="progressbar" style="width:0%">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+
+
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <!-- Periods-->
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <label>
+            Page {{round_number}} of 3
+        </label>
+        <div class="progress">
+            <div class="progress-bar-task bg-info" role="progressbar" style="width:{{progress}}%">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+
+
+
+<div class="card bg-light">
+<div class="card-body">
+    <h2>
+        Please answer the following questions
+    </h2>
+    <br>
+
+
+    {{for question, field in fomo_list}}
+
+    <h5>{{question}}</h5>
+
+    <table class="table soep table-borderless">
+        <tbody>
+            <tr>
+                {{for i in 1,2,3,4,5,6,7}}
+                <td style="width: 10%">
+                <input type="radio" name="{{field}}" value="{{i}}" required>
+                </td>
+                {{endfor}}
+            </tr>
+
+            <tr>
+                {{for label in likert_labels}}
+                <td class="likert-labels m-0" style="width: 10%; padding-top: 0px; padding-bottom: 25px">
+                {{label}}
+                </td>
+                {{endfor}}
+            </tr>
+
+        </tbody>
+    </table>
+    {{endfor}}
+
+</div>
+    </div>
+
+
+    {{ next_button }}
+
+{{ endblock }}

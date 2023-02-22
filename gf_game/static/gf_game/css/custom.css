@@ -1,0 +1,308 @@
+/* ****************************************************************************************************************** */
+/* *** Progress Bar *** */
+/* ****************************************************************************************************************** */
+
+.progress {
+    height: 10px;
+    margin-bottom: 4px
+}
+
+.progress-bar-task {
+    background-color: rgba(91, 192, 222, 0.10);
+    background-image: linear-gradient(to bottom, rgba(43, 102, 154, 0.5) 0, rgba(43, 102, 154, 0.8) 100%);
+    background-repeat: repeat-x;
+    filter:
+}
+
+.progress-bar-task {
+    float: left;
+    width: 0;
+    height: 100%;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);
+    -webkit-transition: width .6s ease;
+    transition: width .6s ease;
+    background-color: rgba(91, 192, 222, 0.10);
+    background-image: linear-gradient(to bottom, rgba(43, 102, 154, 0.2) 0, rgba(43, 102, 154, 0.4) 100%);
+    background-repeat: repeat-x;
+    filter:
+}
+
+.progress-vspace {
+    height: 40px;
+}
+
+label {
+    font-size: smaller;
+    font-style: italic;
+    font-weight: normal;
+    margin-bottom: 3pt;
+}
+
+/* ****************************************************************************************************************** */
+/* *** POPUP *** */
+/* ****************************************************************************************************************** */
+.popupContainer {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(90, 90, 90, 0.5);
+    z-index: 9999;
+    justify-items: center;
+}
+
+.popup {
+    max-height: 90vh;
+    width: 50vw;
+    position: fixed;
+    top: 5vh;
+    left: 25vw;
+    overflow: auto;
+    background: #fff !important;
+}
+
+.popup h3 {
+    color: #000;
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.popup .popupHeader {
+    display: flex;
+    justify-content: space-between;
+}
+
+.popup .popupClose{
+    cursor: pointer;
+}
+
+.exitPopup {
+    padding: 5px 10px;
+    height: 100%;
+    width: 100%;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+    border-radius: .25rem;
+}
+
+.exitPopup:hover {
+    filter: brightness(95%);
+}
+
+#gameStart .popup {
+    display: grid;
+    place-content: center;
+    background-color: #fff3cd !important;
+    border-color: #ffeeba;
+    height: 30vh !important;
+    top: 35vh !important;
+    border-radius: .25rem;
+}
+
+#HSGameStart,
+#HSThresholdBreach {
+    display: flex;
+    place-content: center;
+}
+
+#HSGameStart input,
+#HSThresholdBreach input {
+    background-color: #f0cd65;
+    color: #000000;
+}
+
+#HSGameStart input:hover,
+#HSThresholdBreach input:hover {
+    filter: brightness(95%);
+}
+
+#gameStart p,
+#thresholdBreach p {
+    margin: 1rem;
+}
+
+/* ****************************************************************************************************************** */
+/* *** BID *** */
+/* ****************************************************************************************************************** */
+
+.instructions-btn {
+    margin-bottom: 0.5rem;
+    float: right;
+;
+}
+
+.selected_green {
+    box-shadow: 0 0 0 0.25rem rgb(60 153 110 / 50%);
+}
+
+.selected_red {
+    box-shadow: 0 0 0 0.25rem rgb(220 53 69 / 50%);
+}
+
+.intro-table{
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+
+.caption-table{
+    text-align: center;
+}
+
+.card{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.next-button{
+    text-align: center;
+}
+
+.alert-info{
+    margin-top: 10px;
+}
+
+.statement_belief{
+    text-align: center;
+    font-style: italic;
+    font-size: medium;
+}
+
+.table-slider{
+    border: none;
+    border-color: transparent;
+}
+
+.table-slider-right{
+    text-align: right;
+}
+
+.slider-labels{
+    font-style: italic;
+}
+
+#sliderinput{
+    font-weight: bold;
+}
+
+.table-radio-btn{
+    text-align: center;
+    border-style: none;
+    margin-bottom: 0px; !important;
+    padding-bottom: 0px; !important;
+}
+
+.otree-timer {
+    display: none;
+}
+
+#asset-table-header-value{
+    font-weight: bold;
+    font-size: larger;
+     border-style: none;
+    margin: 0px; !important;
+    padding: 0px; !important;
+}
+
+.asset-table {
+    width: 60%;
+    margin-bottom: 10px;
+    border-style: none;
+    padding: 0px;
+}
+
+#asset-table-chars {
+    font-size: xx-large;
+    font-weight: bold;
+    border-style: none;
+}
+
+td.no-pad-border{
+    padding: 0px;
+    border-bottom-width: 0px ;
+}
+
+#asset-table-header-price{
+    font-weight: bold;
+    font-size: larger;
+     border-style: none;
+    margin: 0px; !important;
+    padding: 0px; !important;
+}
+
+#asset-table-header-cash{
+    font-weight: bold;
+    font-size: larger;
+     border-style: none;
+    margin: 0px; !important;
+    padding: 0px; !important;
+}
+
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .asset-table {
+    width: 100%;
+    margin-bottom: 20px;
+    border-style: none;
+    padding: 0px;
+}
+    #asset-table-header-price{
+    font-weight: bold;
+    font-size: large;
+     border-style: none;
+    margin: 0px; !important;
+    padding: 0px; !important;
+}
+    #asset-table-header-value{
+    font-weight: bold;
+    font-size: large;
+     border-style: none;
+    margin: 0px; !important;
+    padding: 0px; !important;
+}
+
+    #asset-table-chars {
+    font-size: large;
+    font-weight: bold;
+    border-style: none;
+}
+    #cash-account {
+        font-size: large;
+    }
+}
+
+#btn-yes, #btn-no{
+    width: 49%;
+}
+
+#cash-account{
+    margin-top: 15px;
+}
+
+#div_asymmetric_confirm{
+    text-align: center;
+}
+
+#dice_rolls{
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#confirm_asymmetric{
+    width: 30%;
+}
+
+.alert-warning, .alert-success {
+    margin-top: 15px;
+}
+
+

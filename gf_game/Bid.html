@@ -1,0 +1,223 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{# ****************************************************************************************************************** #}
+{# *** STYLES *** #}
+{# ****************************************************************************************************************** #}
+{% block styles %}
+<link href="{% static 'gf_game/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+<script src="{% static 'gf_game/js/Bid.js' %}"></script>
+{{ if round_number == 1 }}
+    {{ include C.GAMESTART_TEMPLATE }}
+    <script>
+        let x = document.getElementById('gameStart');
+        x.style.display = "grid";
+        $('body').css('overflow', 'hidden');
+    </script>
+{{ endif }}
+{% endblock %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{% block title %}
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
+{% block content %}
+
+
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <!-- Progress Bar App-->
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <label style="display: none">
+            Experimental task 2 of 2
+        </label>
+        <div class="progress" style="display: none">
+            <div class="progress-bar-task" role="progressbar" style="width:{{ task_progress }}%">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <!-- Market -->
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <label>
+            Market {{market}} of 5
+        </label>
+        <div class="progress">
+            <div class="progress-bar-task bg-info" role="progressbar" style="width:{{ market_progress }}%">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <!-- Periods-->
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <label>
+            Period {{stage}} of 11
+        </label>
+        <div class="progress">
+            <div class="progress-bar-task bg-info" role="progressbar" style="width:{{ stage_progress }}%">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <!-- Instructions button-->
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="instructions">
+                    {{include C.INSTRUCTIONS_TEMPLATE}}
+        </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"  style="color: white" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+{{if stage != 1}}
+    {{if bought or sold or token_kept_previous}}
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+             class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img"
+             aria-label="Warning:">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+        <div>
+            {{if token_kept_previous}} You kept the token. {{elif bought}} You successfully bought the token in the previous
+            period for {{previous_token_bid}}. {{else}} You successfully sold the token in the previous period for {{previous_token_bid}}. {{endif}}
+        </div>
+    </div>
+    {{else}}
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+             class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img"
+             aria-label="Warning:">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+        </svg>
+        <div>
+            {{if previous_bid and not got_token}}Your order to buy was unsuccessful. {{else}} You didn't submit an order in the previous
+            round. {{endif}}
+        </div>
+    </div>
+    {{endif}}
+{{endif}}
+
+<div class="card bg-light">
+<div class="card-body">
+    <h2 style="margin-bottom: 15px">
+        Bid
+        <button type="button" class="btn btn-outline-secondary instructions-btn" data-bs-toggle="modal" data-bs-target="#myModal" >
+        Instructions
+        </button>
+    </h2>
+
+    <table class="table asset-table">
+        <thead>
+        <tr>
+            <td id="asset-table-header-value">Value</td>
+            <td id="asset-table-header-price">Current price</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr id="asset-table-chars">
+            <td class="no-pad-border">{{0 | c}} {{if treatment != 'BASELINE'}} or {{H_value}} {{endif}}</td>
+            <td class="no-pad-border">{{token_bid}}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>
+        The value of the token in this market round
+        {{ if treatment == 'BASELINE' }}
+             is <b>{{0 | c}}</b> with certainty.
+        {{ endif }}
+        {{ if uncertainty == 'RISK' or uncertainty == 'AMBIGUITY'}}
+        can be <b>{{0 | c}}</b> or <b>{{H_value}}</b>.
+        {{ endif }}
+            {{ if uncertainty == 'RISK' }}
+                It is {{H_value}} only if three dice (showing the numbers 1 to 6 with equal
+                probability) all show 6 at the same time.
+            {{ endif }}
+    </p>
+
+    {{if information == 'ASYMMETRIC' and got_token or information == 'ASYMMETRIC' and once_got_token}}
+    <p>
+
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+            </symbol>
+        </svg>
+
+    <div class="alert alert-primary d-flex align-items-center" role="alert">
+        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
+            <use xlink:href="#info-fill"/>
+        </svg>
+        <div>
+
+            <b>{{if got_token}}As you are the owner of the token, you get to know the true value of it.
+                {{else}}Since you have once owned the token, you know the true value of it.{{endif}} The true value of
+                the token is {{token_value}}.</b>
+
+                {{if got_token and not token_kept_previous}}
+
+                <script src="{% static 'gf_game/js/asymmetric.js' %}"></script>
+
+                <div id="div_asymmetric_confirm">
+
+                Please click the OK button to confirm that you have seen this message. <br>
+                <button id="confirm_asymmetric" type="button" class="btn btn-outline-primary">OK</button>
+
+            </div>
+                {{endif}}
+
+
+        </div>
+    </div>
+
+    </p>
+    {{endif}}
+
+    <p>
+        <h5 style="font-style: italic">Do you want to
+        {{if got_token == True}}keep{{else}}buy{{endif}}
+        the token{{if got_token == True}}?{{else}} for {{token_bid}}?{{endif}}
+    </h5>
+    </p>
+
+    <button name="{{var_name}}" class="btn btn-success"  id="btn-yes" value="True" {{if got_token and not token_kept_previous}} onclick=" return checkbeforesubmit()" {{endif}}>Yes{{if got_token}} (Keep){{endif}}</button>
+    <button  name="{{var_name}}" class="btn btn-danger"  id="btn-no" value="False" {{if got_token and not token_kept_previous}} onclick=" return checkbeforesubmit()" {{endif}}>No{{if got_token}} (Sell){{endif}}</button>
+
+    <h5 id="cash-account">Cash account: {{pocket}}</h5>
+
+</div>
+</div>
+
+<div class="next-button" style="display: none">
+     <button class="btn btn-primary" onclick="return checkValue()">Continue</button>
+</div>
+
+
+
+
+{% endblock %}

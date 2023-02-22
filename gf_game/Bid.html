@@ -140,23 +140,43 @@
         </thead>
         <tbody>
         <tr id="asset-table-chars">
-            <td class="no-pad-border">{{0 | c}} {{if treatment != 'BASELINE'}} or {{H_value}} {{endif}}</td>
+            <td class="no-pad-border">
+                {{if information != 'ASYMMETRIC'}}
+                {{0 | c}} {{if treatment != 'BASELINE'}} or {{H_value}} {{endif}}
+                {{else}}
+                {{if got_token or once_got_token}}
+                {{token_value}}
+                {{else}}
+                {{0 | c}} or {{H_value}}
+                {{endif}}
+                {{endif}}
+            </td>
             <td class="no-pad-border">{{token_bid}}</td>
         </tr>
         </tbody>
     </table>
 
     <p>
-        The value of the token in this market round
+        The value of the token in this market
         {{ if treatment == 'BASELINE' }}
              is <b>{{0 | c}}</b> with certainty.
         {{ endif }}
         {{ if uncertainty == 'RISK' or uncertainty == 'AMBIGUITY'}}
-        can be <b>{{0 | c}}</b> or <b>{{H_value}}</b>.
-        {{ endif }}
+            {{if information != "ASYMMETRIC"}}
+                can be <b>{{0 | c}}</b> or <b>{{H_value}}</b>.
+            {{else}}
+                {{if got_token or once_got_token}}
+                    is <b>{{token_value}}</b> with certainty.
+                {{else}}
+                can be <b>{{0 | c}}</b> or <b>{{H_value}}</b>.
+                {{endif}}
+            {{ endif }}
+        {{endif}}
             {{ if uncertainty == 'RISK' }}
-                It is {{H_value}} only if three dice (showing the numbers 1 to 6 with equal
-                probability) all show 6 at the same time.
+                {{if not once_got_token}}
+                    It is {{H_value}} only if three dice (showing the numbers 1 to 6 with equal
+                    probability) all show 6 at the same time.
+                {{endif}}
             {{ endif }}
     </p>
 
@@ -176,10 +196,10 @@
         <div>
 
             <b>{{if got_token}}As you are the owner of the token, you get to know the true value of it.
-                {{else}}Since you have once owned the token, you know the true value of it.{{endif}} The true value of
+                {{else}}Since you owned the token, you know the true value of it.{{endif}} The true value of
                 the token is {{token_value}}.</b>
 
-                {{if got_token and not token_kept_previous}}
+                {{if got_token and not once_got_token}}
 
                 <script src="{% static 'gf_game/js/asymmetric.js' %}"></script>
 

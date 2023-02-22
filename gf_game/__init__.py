@@ -125,7 +125,7 @@ def creating_session(subsession: Subsession):
 
         for p in g.get_players():
             if g.current_stage == 1:
-                p.pocket = 10
+                p.pocket = C.ENDOWMENT
                 p.participant.vars["payoffs"] = [] # initialize a list for payoffs
 
 
@@ -204,7 +204,7 @@ def setup_market(group: Group): # setup the token value
 
     # setup for pocket for each player
     for p in group.get_players():
-        p.pocket = 10
+        p.pocket = C.ENDOWMENT
         p.got_token = 0
         p.participant.vars["once_got_token"] = False
         if p.group.treatment != "BASELINE":
@@ -294,6 +294,9 @@ def set_buyer(group: Group):
                 # add sell to prior winner pocket for the next round
                 prior_winner.in_round(prior_winner.round_number + 1).pocket = prior_winner.pocket + group.token_bid
 
+                # set variable that winner once got the token
+                winner.participant.vars["once_got_token"] = True
+
                 # for every other player transfer the pocket into the next round
                 others = [p for p in group.get_players() if p.got_token == 0 and p.gets_token == 0]
                 for p in others:
@@ -365,6 +368,7 @@ class Marketsetup(WaitPage):
         if player.group.current_stage == 1:
             player.participant.vars["market_continue"] = True
             player.participant.vars["market_ends_shown"] = False # set continue variable
+            player.participant.vars["early_end_got_token"] = False
             return True
 
     def after_all_players_arrive(group: Group):  setup_market(group)
@@ -488,7 +492,7 @@ class ResultsWaitPage(WaitPage):
 #     after_all_players_arrive = set_winner
 
 class MarketEarlyEnd(Page):
-    timeout_seconds = 15
+    timeout_seconds = 10
 
     def is_displayed(player: Player):
         if player.participant.vars["market_continue"] == False and player.participant.vars["market_ends_shown"] is not True:
@@ -513,10 +517,12 @@ class MarketEarlyEnd(Page):
             "treatment": player.group.treatment,
             "uncertainty": player.group.field_maybe_none('uncertainty'),
             "information": player.group.field_maybe_none('information'),
+            "final_market": player.group.current_market == C.NUM_MARKETS,
         }
 
     def before_next_page(player: Player, timeout_happened):
         player.participant.vars["market_ends_shown"] = True
+        player.participant.vars["early_end_got_token"] = player.got_token
 
 
 
@@ -524,7 +530,7 @@ class Result(Page):
     form_model = 'player'
     form_fields = []
 
-    #timeout_seconds = 15
+    timeout_seconds = 10
 
     def is_displayed(player: Player):
         if player.group.current_stage == 11:
@@ -535,6 +541,14 @@ class Result(Page):
         task_progress = 50  # player.participant.vars["task_number"]/2
         market_progress = player.group.current_market / C.NUM_MARKETS * 100
         stage_progress = player.group.current_stage / C.NUM_STAGES * 100
+
+        # determine who got token - when market regularly ends it is the one who buys it (who gets it)
+        # if not: it is the one who got it in the early end screen
+        if player.participant.vars["market_continue"]:
+            got_token = player.gets_token
+        else:
+            got_token = player.participant.vars["early_end_got_token"]
+
 
         return {
             "market_continue": player.participant.vars["market_continue"],
@@ -549,7 +563,9 @@ class Result(Page):
             "information": player.group.field_maybe_none('information'),
             "token_value": player.group.token_value,
             "payoff": player.participant.vars["payoffs"][player.group.current_market - 1],
-            "dice_rolls": player.participant.vars["dice_rolls"]
+            "dice_rolls": player.participant.vars["dice_rolls"],
+            "got_token": got_token,
+            "final_market": player.group.current_market == C.NUM_MARKETS
         }
 
 

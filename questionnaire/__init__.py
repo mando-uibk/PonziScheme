@@ -30,21 +30,17 @@ class C(BaseConstants):
     ]
 
     FOMO_LIKERT = [
-        "strongly disagree",
-        "disagree",
-        "somewhat disagree",
-        "neither agree nor disagree",
-        "somewhat agree",
-        "agree",
-        "strongly agree"
-    ]
-
-    BELIEF_QUESTION = [
-        "Did you belief the experimenter that the value of the token is zero for sure"
-    ]
-
-    BELIEF_FORMFIELD = [
-        "belief_experimenter"
+        "0 <br> strongly disagree",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10 <br> strongly agree"
     ]
 
     FINLIT_QUESTIONS = [
@@ -69,12 +65,10 @@ class C(BaseConstants):
     ]
 
     SOEP_QUESTIONS = [
-        "How do you see yourself: Are you generally a person who is fully prepared to take risks or do you try to avoid taking risks?",
         "How do you see yourself: Are you a person who is fully prepared to take risks or do you try to avoid taking risks when doing investments?"
     ]
 
     SOEP_FORMFIELDS = [
-        "soep_general",
         "soep_investments"
     ]
 
@@ -105,11 +99,7 @@ class Player(BasePlayer):
     finlit_score = models.IntegerField()
 
     # SOEP
-    soep_general = models.IntegerField()
     soep_investments = models.IntegerField()
-
-    # BELIEF
-    belief_experimenter = models.IntegerField()
 
     # DEMOGRAPHICS
     age = models.IntegerField()
@@ -134,7 +124,6 @@ def creating_session(subsession: Subsession):
 
             # safe randomized stuff
             p.participant.vars["fomo_list"] = fomo_list
-            p.participant.vars["belief_list"] = list(zip(C.BELIEF_QUESTION,C.BELIEF_FORMFIELD))
             p.participant.vars["finlit_list"] = finlit_list
             p.participant.vars["soep_list"] = list(zip(C.SOEP_QUESTIONS,C.SOEP_FORMFIELDS))
 

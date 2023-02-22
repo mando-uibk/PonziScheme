@@ -55,10 +55,10 @@
         <!-- ------------------------------------------------------------------------------------------------------- -->
         <!-- Periods-->
         <!-- ------------------------------------------------------------------------------------------------------- -->
-        <label>
+        <label style="display: none">
             Period {{stage}} of 11
         </label>
-        <div class="progress">
+        <div class="progress" style="display: none">
             <div class="progress-bar-task bg-info" role="progressbar" style="width:{{ stage_progress }}%">
                 <span class="sr-only"></span>
             </div>
@@ -69,7 +69,10 @@
 <div class="alert alert-success" role="alert">
   <h2 class="alert-heading">Results of market {{market}}</h2>
 
-    {{if dice_rolls}}
+
+    {{if treatment != 'BASELINE'}}
+
+    {{if got_token and uncertainty == "RISK"}}
 
     <h5> The following dices have been rolled:</h5>
 
@@ -119,14 +122,17 @@
         </svg>
         {{endif}}
         {{endfor}}
-
     </div>
 
     <h5>Hence, the value of the token was {{token_value}}.</h5>
 
-    {{else}}
+    {{elif got_token}}
+
+    <br>
 
     <h5>The value of the token was {{token_value}}.</h5>
+
+    {{endif}}
 
     {{endif}}
 
@@ -134,15 +140,11 @@
 
     <h5>Your payoff in this round is {{payoff}}.</h5>
 
-    <br>
-
-    <p>The period-prediction which was selected for you is round. You expected with y % that the value is, that Z people
-    bid in this round, and that T people will bid in the following round. </p>
   <hr>
-  <p class="mb-0">After 15 seconds, you are automatically forwarded and the next market will begin.</p>
+    <p class="mb-0">After 10 seconds, you are automatically forwarded{{if not final_market}} and a <b>new and independent</b> market will start.
+  {{else}}.{{endif}}</p>
 </div>
 
-{{next_button}}
 
 
 {% endblock %}

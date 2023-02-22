@@ -71,7 +71,7 @@ Questionnaire
     <table class="table soep table-borderless">
         <tbody>
             <tr>
-                {{for i in 1,2,3,4,5,6,7}}
+                {{for i in 0,1,2,3,4,5,6,7,8,9,10}}
                 <td style="width: 10%">
                 <input type="radio" name="{{field}}" value="{{i}}" required>
                 </td>
@@ -80,7 +80,7 @@ Questionnaire
 
             <tr>
                 {{for label in likert_labels}}
-                <td class="likert-labels m-0" style="width: 10%; padding-top: 0px; padding-bottom: 25px">
+                <td class="likert-labels m-0" style="width: 10%; padding-top: 0px; padding-bottom: 5px">
                 {{label}}
                 </td>
                 {{endfor}}

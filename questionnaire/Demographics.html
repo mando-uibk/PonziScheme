@@ -96,10 +96,10 @@ Questionnaire
 
         <tr>
             <td>
-                Self proficiency in math:
+                Self proficiency in math (0: very weak, 10: very strong):
             </td>
             <td class="ma_likert">
-                {{ for i in 1,2,3,4,5,6,7 }}
+                {{ for i in 0,1,2,3,4,5,6,7,8,9,10 }}
                 <div class="radio">
                     <input type="radio" name="math_proficiency" id="radio" value="{{ i }}" required> <br>
                     <label>{{ i }}</label>
@@ -108,18 +108,6 @@ Questionnaire
             </td>
         </tr>
 
-        <tr>
-            <td>
-                Did you belief the experimenter that the <br> value of the token is zero for sure?
-            </td>
-            <td>
-                <select class="form-select" name="belief_experimenter" style="width: 10em" required>
-                    <option value="" disabled selected>Please select</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                </select>
-            </td>
-        </tr>
 
 
     </table>

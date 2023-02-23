@@ -6,6 +6,7 @@ SESSION_CONFIGS = [
         display_name="Greater Fool Game: BASELINE",
         num_demo_participants=3,
         app_sequence=['gf_game'],
+        randomize_treatments = False, # if randomization is on treatment is randomly assigned
         treatment='BASELINE'  # treatment is either BASELINE, AMBI_SYM, RISK_SYM, AMBI_ASYM, RISK_ASYM
     ),
     dict(
@@ -13,6 +14,7 @@ SESSION_CONFIGS = [
         display_name="Greater Fool Game: AMBI_SYM",
         num_demo_participants=3,
         app_sequence=['gf_game'],
+        randomize_treatments = False,
         treatment='AMBI_SYM'  # treatment is either BASELINE, AMBI_SYM, RISK_SYM, AMBI_ASYM, RISK_ASYM
     ),
     dict(
@@ -20,6 +22,7 @@ SESSION_CONFIGS = [
         display_name="Greater Fool Game: RISK_SYM",
         num_demo_participants=3,
         app_sequence=['gf_game'],
+        randomize_treatments = False,
         treatment='RISK_SYM'  # treatment is either BASELINE, AMBI_SYM, RISK_SYM, AMBI_ASYM, RISK_ASYM
     ),
     dict(
@@ -27,6 +30,7 @@ SESSION_CONFIGS = [
         display_name="Greater Fool Game: AMBI_ASYM",
         num_demo_participants=3,
         app_sequence=['gf_game'],
+        randomize_treatments = False,
         treatment='AMBI_ASYM'  # treatment is either BASELINE, AMBI_SYM, RISK_SYM, AMBI_ASYM, RISK_ASYM
     ),
     dict(
@@ -34,6 +38,7 @@ SESSION_CONFIGS = [
         display_name="Greater Fool Game: RISK_ASYM",
         num_demo_participants=3,
         app_sequence=['gf_game'],
+        randomize_treatments = False,
         treatment='RISK_ASYM'  # treatment is either BASELINE, AMBI_SYM, RISK_SYM, AMBI_ASYM, RISK_ASYM
     ),
 
@@ -58,7 +63,7 @@ SESSION_CONFIGS = [
 # e.g. session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
+    real_world_currency_per_point=1.00, participation_fee=0.00, doc="", randomize_treatments = True,
 )
 
 
@@ -79,13 +84,19 @@ ROOMS = [
     dict(name='live_demo', display_name='Room for live demo (no participant labels)'),
 ]
 
+PARTICIPANT_FILEDS = [
+    'belief_collection',
+    'payoffs',
+    'market_to_pay',
+    'belief_to_pay',
+]
+
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable
 ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 
-DEMO_PAGE_INTRO_HTML = """
-Here are some oTree games.
-"""
+DEMO_PAGE_INTRO_HTML = 'Demos for Greater Fool Game'
+
 
 # don't share this with anybody.
 SECRET_KEY = '6lertt4wlb09zj@4wyuy-p-6)i$vh!ljwx&r9bti6kgw54k-h8'

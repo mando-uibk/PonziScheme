@@ -14,16 +14,13 @@ at the end of the experiment. However, the endowment is offered to everyone foll
 class C(BaseConstants):
     NAME_IN_URL = 'gf_game'
     PLAYERS_PER_GROUP = 3
-    # Treatments
-    #TREATMENTS = session.config['treatment']
-    # UNCOMMENT FOR RANDOM ASSIGNMENT
-    # TREATMENTS = [
-    #     "BASELINE",  # Value of the token is always zero and everybody knows that
-    #     "AMBI_SYM",  # token value is zero or h with unknown probability and everybody has same information set
-    #     "RISK_SYM",  # toke value is zero or h with known probability and everybody has same information
-    #     "AMBI_ASYM",  # token value is zero or h with unknown probability and holder of the token knows true value
-    #     "RISK_ASYM",  # token value is zero or h with known probability and holder of the token knows true value
-    # ]
+    TREATMENTS = [
+        "BASELINE",  # Value of the token is always zero and everybody knows that
+        "AMBI_SYM",  # token value is zero or h with unknown probability and everybody has same information set
+        "RISK_SYM",  # toke value is zero or h with known probability and everybody has same information
+        "AMBI_ASYM",  # token value is zero or h with unknown probability and holder of the token knows true value
+        "RISK_ASYM",  # token value is zero or h with known probability and holder of the token knows true value
+    ]
     # Number of periods played in each market round (also called stages)
     NUM_STAGES = 11
     # Number of markets (a market round consists of periods or stages)
@@ -156,8 +153,9 @@ def set_payoff(player: Player):
 def treatment_setup(group: Group): # randomize treatment for the group
     if group.round_number == 1:
         group.treatment = group.session.config['treatment']
-        # UNCOMMENT FOR RANDOMIZATION
-        # group.treatment = random.choice(C.TREATMENTS)
+        # RANDOMIZATION: PARAMETER IN SESSION CONFIGS
+        if group.session.config['randomize_treatments']:
+            group.treatment = random.choice(C.TREATMENTS)
         if group.treatment != "BASELINE":
             group.uncertainty = (lambda x: "AMBIGUITY" if x in ["AMBI_SYM", "AMBI_ASYM"] else "RISK")(group.treatment)
             group.information = (lambda x: "SYMMETRIC" if x in ["AMBI_SYM", "RISK_SYM"] else "ASYMMETRIC")(
@@ -184,8 +182,9 @@ def setup_market(group: Group): # setup the token value
     if group.treatment == "BASELINE":
         group.token_value = 0
 
-        for i in range(1,C.NUM_ROUNDS):
-            group.in_round(i).token_value = group.in_round(1).token_value
+        for i in range(1, 11):  # transfer token value across the whole market
+            group.in_round(group.round_number + i).token_value = group.in_round(group.round_number).token_value
+
     else:
         dice_1 = random.choice(range(1,7))
         dice_2 = random.choice(range(1,7))
@@ -330,6 +329,10 @@ class Introduction(Page):
             "bid_list": list(zip(range(1,12),C.token_bid_list))
         }
 
+    def before_next_page(player: Player, timeout_happened):
+        # initialize a list to collec the beliefs over the course of the game
+        player.participant.vars["belief_collection"] = []
+
 
 
 
@@ -473,6 +476,18 @@ class Belief(Page):
             "H_value": C.token_value_list[player.group.current_market-1],
         }
 
+    def before_next_page(player: Player, timeout_happened):
+        # store beliefs in a list for the end
+        if player.group.current_stage != 11:
+            last_belief = player.belief_bidders_following
+        else:
+            last_belief = None
+
+
+        player.participant.vars["belief_collection"].append([player.group.current_market, player.group.current_stage,
+                                                            (player.belief_other_value,player.belief_bidders_current,
+                                                             last_belief)])
+
 class ResultsWaitPage(WaitPage):
 
     def is_displayed(player: Player):
@@ -481,15 +496,7 @@ class ResultsWaitPage(WaitPage):
 
     def after_all_players_arrive(group: Group): set_buyer(group)
 
-#after_all_players_arrive = set_winner
 
-# class Bid(Page):
-#     form_model = 'player'
-#     form_fields = ['bid_amount']
-#
-#
-# class ResultsWaitPage(WaitPage):
-#     after_all_players_arrive = set_winner
 
 class MarketEarlyEnd(Page):
     timeout_seconds = 10
@@ -565,10 +572,9 @@ class Result(Page):
             "payoff": player.participant.vars["payoffs"][player.group.current_market - 1],
             "dice_rolls": player.participant.vars["dice_rolls"],
             "got_token": got_token,
-            "final_market": player.group.current_market == C.NUM_MARKETS
+            "final_market": player.group.current_market == C.NUM_MARKETS,
+            "belief_collection": player.participant.vars["belief_collection"]
         }
-
-
 
 
 page_sequence = [

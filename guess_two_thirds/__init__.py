@@ -11,7 +11,7 @@ See https://en.wikipedia.org/wiki/Guess_2/3_of_the_average
 
 class C(BaseConstants):
     PLAYERS_PER_GROUP = 3
-    NUM_ROUNDS = 3
+    NUM_ROUNDS = 1
     NAME_IN_URL = 'guess_two_thirds'
     JACKPOT = Currency(100)
     GUESS_MAX = 100
@@ -84,4 +84,4 @@ class Results(Page):
         return dict(sorted_guesses=sorted_guesses)
 
 
-page_sequence = [Introduction, Guess, ResultsWaitPage, Results]
+page_sequence = [Introduction, Guess, ResultsWaitPage]

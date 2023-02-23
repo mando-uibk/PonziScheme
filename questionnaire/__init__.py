@@ -91,11 +91,16 @@ class Player(BasePlayer):
     fomo_celebrities = models.IntegerField()
     fomo_skyrocketing = models.IntegerField()
     fomo_plummeting = models.IntegerField()
+    fomo_order = models.StringField()
 
     # FINLIT
+    finlit_questions_order = models.StringField()
     finlit_interest = models.StringField()
+    finlit_order_interest = models.StringField()
     finlit_inflation = models.StringField()
+    finlit_order_inflation = models.StringField()
     finlit_diversification = models.StringField()
+    finlit_order_diversification = models.StringField()
     finlit_score = models.IntegerField()
 
     # SOEP
@@ -137,8 +142,6 @@ def creating_session(subsession: Subsession):
 
 
 # PAGES
-class MyPage(Page):
-    pass
 
 class Fomo(Page):
     def is_displayed(player: Player):
@@ -159,6 +162,10 @@ class Fomo(Page):
             "likert_labels": C.FOMO_LIKERT,
         }
 
+    def before_next_page(player: Player, timeout_happened):
+        # store order of fomo questions
+         player.fomo_order = str([question[1] for question in player.participant.vars["fomo_list"]])
+
 class Finlit_soep(Page):
     def is_displayed(player: Player):
         participant = player.participant
@@ -175,14 +182,27 @@ class Finlit_soep(Page):
             "finlit_list": player.participant.vars["finlit_list"],
             "soep_list": player.participant.vars["soep_list"],
             "round_number": player.round_number,
+            "finlit_order": str([question[2] for question in player.participant.vars["finlit_list"]]),
+            "finlit_order_interest": str([question[1] for question in player.participant.vars["finlit_list"] if question[2] == 'finlit_interest']),
+            "finlit_order_inflation": str([question[1] for question in player.participant.vars["finlit_list"] if question[2] == 'finlit_inflation']),
+            "finlit_order_diversification": str([question[1] for question in player.participant.vars["finlit_list"] if question[2] == 'finlit_diversification'])
         }
 
     def before_next_page(player: Player, timeout_happened):
+        # calculate financial literacy score
         player.finlit_score = sum([
             player.finlit_interest == 'More than €102',
             player.finlit_inflation == 'Less than today',
             player.finlit_diversification == 'False'
         ])
+
+        # store order of questions
+        player.finlit_questions_order = str([question[2] for question in player.participant.vars["finlit_list"]])
+
+        # store order of answers in each question
+        player.finlit_order_interest = str([question[1] for question in player.participant.vars["finlit_list"] if question[2] == 'finlit_interest'])
+        player.finlit_order_inflation = str([question[1] for question in player.participant.vars["finlit_list"] if question[2] == 'finlit_inflation'])
+        player.finlit_order_diversification = str([question[1] for question in player.participant.vars["finlit_list"] if question[2] == 'finlit_diversification'])
 
 class Demographics(Page):
     def is_displayed(player: Player):
@@ -190,7 +210,6 @@ class Demographics(Page):
 
     form_model = 'player'
     form_fields = ['age','gender','math_proficiency']
-
 
 page_sequence = [
     Fomo,

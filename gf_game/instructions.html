@@ -4,8 +4,8 @@
         Instructions
     </h3>
     <p>
-        You are about to participate in an experiment that includes 5 independent sequential markets consisting of up to
-        11 periods each. You start each market with your earned endowment of 12 Euro. One market will be randomly chosen
+        You are about to participate in an experiment that includes <b> {{C.NUM_MARKETS}} independent</b> sequential markets consisting of up to
+        <b>{{C.NUM_PERIODS}} periods each</b>. You start each market with your earned endowment of <b>{{C.ENDOWMENT}}</b>. One market will be randomly chosen
         for payment. The chosen market will be revealed to everyone only at the end of the experiment. Your earnings in
         the chosen market will be paid to you in private (by bank transfer).
     </p>
@@ -13,25 +13,30 @@
     <h5>
         Each of the market rounds proceeds as follows:
     </h5>
+
     <p>
-        The value or the possible values are publicly announced on the screen from the beginning and throughout the
-        round. Every participant in the market has identical prior information. The default value of the token is zero.
+        One non-divisible token is sold and resold (up to) {{C.NUM_PERIODS}} periods.
+    </p>
+
+    <p>
+        The  possible values are publicly announced on the screen from the beginning and throughout the
+        market. Every participant in the market has identical prior information. The default value of the token is zero.
         If another value is possible, it is shown on the
         {{if information == 'AMBIGUITY'}}screen, but no probability of occurrence of this second value is revealed at any time
         {{else}}screen.{{endif}}
     </p>
 
     <p>
-        There are 6 participants in the market throughout the experiment. You are one of them. The composition of the
-        market participants never changes.
+        There are {{C.PLAYERS_PER_GROUP}} participants in the market throughout the experiment. You are one of them. <b>The composition of the
+        market participants never changes.</b>
     </p>
 
     <p>
-        In each period, you and the other 5 participants bid to buy or decide not to bid for the token at the
+        In each period, you and the other {{number_others}} participants bid to buy or decide not to bid for the token at the
         announced period price. The following table shows you the prices for the token in each period.
     </p>
 
-    <table class="table table-striped intro-table mb-3">
+    <table class="table table-striped intro-table mb-3 mx-auto w-auto">
         <thead class="table-dark">
             <tr>
                 <th class="caption-table">
@@ -42,7 +47,7 @@
         <tbody>
         {{for period,price in bid_list}}
         <tr>
-            <td>In period {{period}}, the period price is {{price}}.</td>
+            <td>In <b>period {{period}}</b>, the period price is <b>{{price}}</b>.</td>
         </tr>
         {{endfor}}
 
@@ -50,37 +55,55 @@
     </table>
 
     <p>
-        In period 1, the buyer pays the price of {{0.01 | c}} to the experimenter and becomes the first owner of the token.
+        <b>In period 1</b>, the buyer pays the price of {{0.01 | c}} to the experimenter and becomes the first owner of the token.
         The buyer is chosen randomly among the bidders.
     </p>
 
     <p>
-        In period 2 and all later stages the price always doubles from stage to stage and the buyer pays the price to
+        <b>In period 2 and all later periods</b> the price always doubles from period to period and the buyer pays the price to
         the previous owner and becomes the new owner of the token. The previous owner has the privilege to keep the
         token, if s/he decides to bid for the token, so s/he is never forced to sell it. If the previous owner decides
         not to bid for the token, the buyer is randomly chosen among the bidders of the period.
     </p>
 
     <p>
-        The market round ends, if there is no bidder at a given period or if period 11 is reached. The last owner of
-        the token learns and receives the value of the token in the market.
+        {{ if treatment == 'BASELINE'}}
+        <b>The market ends</b>, if there is no bidder at a given period or if period {{C.NUM_PERIODS}} is reached.
+        {{elif treatment == 'AMBI_SYM'}}
+        <b>The market ends</b>, if there is no bidder at a given period or if period {{C.NUM_PERIODS}} is reached.
+        The last owner of the token learns and receives the value of the token in the market.
+        {{elif treatment == 'RISK_SYM'}}
+        <b>The market ends</b>, if there is no bidder at a given period or if period {{C.NUM_PERIODS}} is reached.
+        The last owner of the token learns and receives the value of the token in the market.
+        {{elif treatment == 'AMBI_ASYM'}}
+        <b>The market ends</b>, if there is no bidder at a given period or if period {{C.NUM_PERIODS}} is reached. <b>After buying the token, the
+        owner learns the value of the token</b> and after the last period the last owner receives the value of the
+        token in the market.
+        {{elif treatment == 'RISK_ASYM'}}
+        <b>The market ends</b>, if there is no bidder at a given period or if period {{C.NUM_MARKETS}} is reached. <b>After buying the token,
+        the owner learns the value of the token</b> and after the last period the last owner receives the value of the
+        token in the market.
+        {{endif}} At the end of each market you are informed of the earnings in that round.
     </p>
 
     <p>
-        Following your bid in a given period, you will be asked to enter your expectation of the token’s value, and how
+
+    </p>
+
+
+    <p>
+        <b>Following your bid in a given period</b>, you will be asked to enter your expectation of the token’s value, and how
         sure you are about this value. You will also be asked your expectation about the number of bidders in the market
-        in the ongoing and the following period. Specifically, you guess the number of bidders among the other 5
+        in the ongoing and the following period. Specifically, you guess the number of bidders among the other {{number_others}}
         participants in the ongoing period and also in the following period. At the end of a market, one
-        period-prediction is selected for eligible payment. If your period-prediction (on value and number of bidders)
-        is correct, a payment of {{ 1 | c }} is added to your earnings if that market is chosen for payment.
+        period-prediction is selected for possible payment.
     </p>
 
     <p>
-        At the end of each market you are informed of the earnings in that round.
-        The market that is selected for payment will be revealed to everyone after the last market is
-        over.
+        The market that is selected for payment will be revealed to <b>everyone after the last market is over</b>.
+        If your period-prediction (on value and number of bidders) is correct, a payment of {{1 | c}} is added to your
+        earnings if that market is chosen for payment.
     </p>
-
 
 </div>
 </div>

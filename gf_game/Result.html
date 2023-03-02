@@ -43,10 +43,10 @@
         <!-- ------------------------------------------------------------------------------------------------------- -->
         <!-- Market -->
         <!-- ------------------------------------------------------------------------------------------------------- -->
-        <label>
+        <label style="display: none">
             Market {{market}} of 5
         </label>
-        <div class="progress">
+        <div class="progress" style="display: none">
             <div class="progress-bar-task bg-info" role="progressbar" style="width:{{ market_progress }}%">
                 <span class="sr-only"></span>
             </div>
@@ -56,10 +56,10 @@
         <!-- Periods-->
         <!-- ------------------------------------------------------------------------------------------------------- -->
         <label style="display: none">
-            Period {{stage}} of 11
+            Period {{period}} of 11
         </label>
         <div class="progress" style="display: none">
-            <div class="progress-bar-task bg-info" role="progressbar" style="width:{{ stage_progress }}%">
+            <div class="progress-bar-task bg-info" role="progressbar" style="width:{{ period_progress }}%">
                 <span class="sr-only"></span>
             </div>
         </div>
@@ -67,7 +67,7 @@
 <br>
 
 <div class="alert alert-success" role="alert">
-  <h2 class="alert-heading">Results of market {{market}}</h2>
+  <h2 class="alert-heading">Results of Market {{market}}</h2>
 
 
     {{if treatment != 'BASELINE'}}

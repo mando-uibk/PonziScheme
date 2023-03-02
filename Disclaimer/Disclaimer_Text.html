@@ -1,0 +1,46 @@
+<div class="card bg-light m-0">
+    <div class="card-body">
+    <p>
+        <h3>
+        Welcome to this experiment!
+        </h3>
+        <br/>
+        We are researchers from the University of Innsbruck and Luxembourg who are interested in asset market behavior.
+        However, all data collected will be anonymized, not passed on to third parties, and only used for scientific research purposes.
+        <br/>
+        <br/>
+        Throughout the experiment you are grouped with 5 other participants. This group of 6 will do two tasks where you
+        interact and where your actions influence the outcomes of the other group members. <b> To make this experiment a
+        success, please finish the experiment in its entirety and do not drop out prematurely. In case you drop out
+        prematurely, you might also hinder other participants from completing the experiment.</b>
+        <br/>
+        <br/>
+        Information on your payoff will be shown on a separate screen and you will receive your payoff  in the upcoming
+        6 weeks via bank transfer. For this we collect your bank credentials, i.e. name of account holder and IBAN, at the end of the experiment. This data
+        will be stored in a separate database and no choices from the experiment can be connected to them.
+        <br/>
+        <br/>
+        If you want to continue please click on <i>I agree and want to participate</i>. If not, please click <i>I disagree and do
+        not want to participate</i>. In this case you are forwarded to the end of the experiment, no data will be collected
+        and you will not receive any payoff.
+        <br/>
+        <br/>
+
+        <div id="survey" class="content">
+            <table class="table">
+                <tr class="question">
+                    <th colspan="1">{{ form.q_agree.label }}</th>
+                </tr>
+                {{ for choice in form.q_agree }}
+                <tr>
+                    <td class="verticalChoice">
+                        <span class="radio">{{ choice }}</span>
+                        <label for={{ choice.id }}>{{ choice.label }}</label>
+                    </td>
+                </tr>
+                {{ endfor }}
+            </table>
+        </div>
+        </p>
+    </div>
+</div>

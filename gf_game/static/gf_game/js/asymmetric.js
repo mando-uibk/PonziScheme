@@ -4,6 +4,8 @@ var confirmed = false
 $(document).ready(function() {
     $("#confirm_asymmetric").click(function(){
         confirmed = true
+
+        document.getElementById("div_asymmetric_confirm").style.display = 'none'
     });
 });
 

@@ -46,24 +46,25 @@
         <label>
             Market {{market}} of 5
         </label>
-        <div class="progress">
+        <div class="progress" style="display: none">
             <div class="progress-bar-task bg-info" role="progressbar" style="width:{{ market_progress }}%">
                 <span class="sr-only"></span>
             </div>
         </div>
 
+<br>
         <!-- ------------------------------------------------------------------------------------------------------- -->
         <!-- Periods-->
         <!-- ------------------------------------------------------------------------------------------------------- -->
         <label>
-            Period {{stage}} of 11
+            Period {{period}} of 11
         </label>
         <div class="progress">
-            <div class="progress-bar-task bg-info" role="progressbar" style="width:{{ stage_progress }}%">
-                <span class="sr-only"></span>
-            </div>
-        </div>
+        {{for p, token_bid in bid_list}}
 
+        <div class="progress-bar progress-bar-task bg-info" role="progressbar" style="width:{{ period_progress }}%; opacity: {{if period >= p}}1{{else}}0.3{{endif}}">{{token_bid}}</div>
+            {{endfor}}
+        </div>
         <!-- ------------------------------------------------------------------------------------------------------- -->
         <!-- Instructions button-->
         <!-- ------------------------------------------------------------------------------------------------------- -->
@@ -94,15 +95,15 @@
         <button type="button" class="btn btn-outline-secondary instructions-btn" data-bs-toggle="modal" data-bs-target="#myModal" >
         Instructions
         </button>
-        <div class="next-button">
+        <div class="next-button d-none">
      <button class="btn btn-primary">Continue</button>
 </div>
     </h2>
 
     <p>
     <h5>What do you think is the token's value?</h5>
-    We told you before that in this market {{if treatment == 'BASELINE'}} the only possible value of the token is <b>{{0|c}}</b>.
-    {{else}} the possible values for the token are <b>{{0|c}}</b> an <b>{{H_value}}</b>. {{endif}}
+    We told you before that in this market {{if treatment == 'BASELINE' or H_value == 0 or information == "ASYMMETRIC" and once_got_token}} the only possible value of the token is <b>{{0|c}}</b>.
+    {{else}} the possible values for the token are <b>{{0|c}}</b> and <b>{{H_value}}</b>. {{endif}}
         Please use the slider below to indicate in % how sure you are that the token's
         value is higher than {{0|c}}. For help, you also
         see the corresponding statement according to your input on the slider below.
@@ -135,14 +136,14 @@
     <table class="table">
         <tbody>
         <tr>
-            {{for i in 0,1,2,3,4,5}}
+            {{for i in number_others_list}}
             <td class="table-radio-btn p-0">
-                <input type="radio" id= "belief_current" name="{{belief_bidders_current}}" value="{{i}}" required checked>
+                <input type="radio" id= "belief_current" name="{{belief_bidders_current}}" value="{{i}}" required>
             </td>
             {{endfor}}
         </tr>
         <tr>
-            {{for i in 0,1,2,3,4,5}}
+            {{for i in number_others_list}}
             <td class="table-radio-btn slider-labels p-0">
                 {{i}}
             </td>
@@ -155,7 +156,7 @@
 
     </p>
 
-    {{if not stage == 11}}
+    {{if not period == 11}}
     <p>
         <h5>How many of the other in your group do you think will bid to buy in the following round?</h5>
 
@@ -164,14 +165,14 @@
     <table class="table">
         <tbody>
         <tr>
-            {{for i in 0,1,2,3,4,5}}
+            {{for i in number_others_list}}
             <td class="table-radio-btn p-0">
-                <input type="radio" id= "belief_following" name="{{belief_bidders_following}}" value="{{i}}" required checked>
+                <input type="radio" id= "belief_following" name="{{belief_bidders_following}}" value="{{i}}" required>
             </td>
             {{endfor}}
         </tr>
         <tr>
-            {{for i in 0,1,2,3,4,5}}
+            {{for i in number_others_list}}
             <td class="table-radio-btn slider-labels p-0">
                 {{i}}
             </td>

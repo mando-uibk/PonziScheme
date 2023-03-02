@@ -13,6 +13,7 @@ class C(BaseConstants):
     NUM_ROUNDS = 3
     QUESTIONS = ["FOMO","FINLIT_SOEP"] # Demographics (and belief) always in the end
     FOMO_QUESTIONS = [
+        'I fear others make more money than me in this experiment ',
         "It bothers me when I miss an opportunity to make money.",
         "Investing in a new project is most beneficial if I invest early.",
         "When my friends tell me about an exciting investment, I want to invest immediately.",
@@ -21,6 +22,7 @@ class C(BaseConstants):
         "When asset prices are plummeting, I wish to invest immediately.",
     ]
     FOMO_FORMFIELDS = [
+        'fomo_fear_experiment',
         "fomo_miss_opportunity",
         "fomo_early_invest",
         "fomo_friends_exciting",
@@ -85,6 +87,7 @@ class Player(BasePlayer):
     page_order = models.StringField()
 
     # FOMO
+    fomo_fear_experiment = models.IntegerField()
     fomo_miss_opportunity = models.IntegerField()
     fomo_early_invest = models.IntegerField()
     fomo_friends_exciting = models.IntegerField()

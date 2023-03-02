@@ -10,6 +10,20 @@ function hideShow(id) {
     }
 }
 
+// counting seconds
+var secondsLabel = document.getElementById("seconds");
+var totalSeconds = 0;
+setInterval(setTime, 1000);
+
+function setTime() {
+  ++totalSeconds;
+  secondsLabel.value = pad(totalSeconds);
+}
+
+function pad(val) {
+  var valString = val;
+  return valString
+}
 
 // Bid button function
 // $(document).ready(function() {

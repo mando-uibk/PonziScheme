@@ -1,7 +1,87 @@
-{{ block title }}Your Guess{{ endblock }}
-{{ block content }}
+{% extends "global/Page.html" %}
+{% load otree static %}
 
-    {{ if player.round_number > 1 }}
+{# ****************************************************************************************************************** #}
+{# *** STYLES *** #}
+{# ****************************************************************************************************************** #}
+{% block styles %}
+<link href="{% static 'gf_game/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+<script src="{% static 'guess_two_thirds/js/Guess.js' %}"></script>
+{{ if player.round_number == 1 }}
+    {{ include C.GAMESTART_TEMPLATE }}
+    <script>
+        let x = document.getElementById('gameStart');
+        x.style.display = "grid";
+        $('body').css('overflow', 'hidden');
+    </script>
+{{ endif }}
+{% endblock %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{% block title %}
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
+{% block content %}
+
+
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <!-- Progress Bar App-->
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <label style="display: none">
+            Task
+        </label>
+        <div class="progress" style="display: none">
+            <div class="progress-bar-task" role="progressbar" style="">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <!-- Instructions button-->
+        <!-- ------------------------------------------------------------------------------------------------------- -->
+        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <div class="instructions">
+                    {{include C.INSTRUCTIONS_TEMPLATE}}
+        </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary"  style="color: white" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+<div class="card bg-light m-0">
+    <div class="card-body">
+
+        <h3>
+            Your Guess
+            <button type="button" class="btn btn-outline-secondary instructions-btn" data-bs-toggle="modal" data-bs-target="#myModal" >
+                Instructions
+        </button>
+        </h3>
+
+        {{ if player.round_number > 1 }}
         <p>
             Here were the two-thirds-average values in previous rounds:
             {{ two_thirds_avg_history }}
@@ -9,8 +89,12 @@
     {{ endif }}
 
     {{ formfields }}
+
+
+</div>
+</div>
+<br>
     {{ next_button }}
 
-    {{ include C.INSTRUCTIONS_TEMPLATE }}
-
 {{ endblock }}
+

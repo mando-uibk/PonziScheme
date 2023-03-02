@@ -1,30 +1,190 @@
-{{ block title }}Thank you{{ endblock }}
-{{ block content }}
+{% extends "global/Page.html" %}
+{% load otree static %}
 
-    <p>
-        <em>Below are examples of messages that could be displayed for different experimental settings.</em>
-    </p>
+{# ****************************************************************************************************************** #}
+{# *** STYLES *** #}
+{# ****************************************************************************************************************** #}
+{% block styles %}
+<link href="{% static 'payment_info/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
 
-    <div class="panel panel-default" style="margin-bottom:10px">
-        <div class="panel-body">
-            <p><strong>Laboratory:</strong></p>
-            <p>Please remain seated until your number is called. Then take your number card, and proceed to the cashier.</p>
-            <p><em>Note: For the cashier in the laboratory, oTree can print a list of payments for all participants as a PDF.</em></p>
-        </div>
-    </div>
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+<script src="{% static 'payment_info/js/PaymentInfo.js' %}"></script>
+{% endblock %}
 
-    <div class="panel panel-default" style="margin-bottom:10px">
-        <div class="panel-body">
-            <p><strong>Classroom:</strong></p>
-            <p><em>If you want to keep track of how students did, the easiest thing is to assign the starting links to students by name.
-                It is even possible to give each student a single permanent link for a whole semester using Rooms;
-                so no need to waste time in each lecture with handing out new links and keeping track of which student uses which link.
-                Alternatively, you may just give
-                students anonymous links or secret nicknames.</em>
-            </p>
-        </div>
-    </div>
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{% block title %}
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
+{% block content %}
+
+
+<div class="card bg-light m-0">
+    <div class="card-body">
+
+        <h3>
+            Thank you!
+        </h3>
+
+        <p>
+            The experiment is now over. Below you can see the payoffs for the different tasks as well as your
+            total payoff. {{if external}} By clicking on the button below you will be forwarded to an external page, where your bank credentials,
+            i.e. name of account holder and IBAN, are collected. This information is stored in a separate database and it will not
+            be possible to conclude to the decisions you made in the experiment. {{endif}}
+        </p>
+
+        {{if guess_two_thirds}}
+        <h4>Task {{guess_two_thirds_task_number}}: Pick a number</h4>
+
+        <p>
+
+        <table class="table table-striped table-borderless w-auto">
+            <thead>
+                <th class="table-dark text-center" colspan="2">
+                    Results
+                </th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Guesses among your group:</td>
+                    <td>{{guess_group_guesses}}</td>
+                </tr>
+
+                <tr>
+                    <td> ⅔ of the average:</td>
+                    <td>{{guess_group_two_thirds}}</td>
+                </tr>
+
+                <tr>
+                    <td>The best guess:</td>
+                    <td>{{guess_best_guess}}</td>
+                </tr>
+
+                <tr>
+                    <td>Your guess was:</td>
+                    <td>{{guess_my_guess}}</td>
+                </tr>
+
+                <tr>
+                    <td>Your additional payoff:</td>
+                    <td>{{guess_my_payoff}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        </p>
+        {{endif}}
+        <br>
+
+        {{if gf_game}}
+
+        <h4>Task {{gf_task_number}}: Markets</h4>
+
+        <p>
+        <table class="table table-striped table-borderless w-auto">
+            <thead>
+            {{for market in gf_number_of_markets}}
+            <th class="table-dark text-center market-table" id="market_head_{{market}}">Market {{market}}</th>
+            {{endfor}}
+            </thead>
+            <tbody>
+            <tr class="text-center">
+                {{for market, payoff in gf_payoffs}}
+                <td class="market-table" id="market_payoff_{{market}}">{{payoff}}</td>
+                {{endfor}}
+            </tr>
+            </tbody>
+        </table>
+        </p>
+
+        <p>
+            <table class="table table-striped table-borderless text-center align-content-center w-auto" >
+                <thead class="table-dark">
+                <th></th>
+                <th>Token's value</th>
+                <th>Number of bidders in this period</th>
+                {{if gf_number_bidders_following}}
+                <th>Number of bidders in following period</th>
+                {{endif}}
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Your prediction</td>
+                        <td>{{gf_my_token_value}}% sure that higher than {{0|c}}</td>
+                        <td>{{gf_my_number_bidders_current}}</td>
+                        {{if gf_number_bidders_following}}
+                        <td>{{gf_my_number_bidders_following}}</td>
+                        {{endif}}
+                    </tr>
+
+                    <tr>
+                        <td>Actual</td>
+                        <td>{{gf_token_value}}</td>
+                        <td>{{gf_number_bidders_current}}</td>
+                        {{if gf_number_bidders_following}}
+                        <td>{{gf_number_bidders_following}}</td>
+                        {{endif}}
+                    </tr>
+                </tbody>
+            </table>
+
+        The chosen market for your group was <b>Market {{gf_chosen_market}}</b>. Hence, your payoff out of this task is
+        <b>{{gf_my_payoff}}</b>. Additionally, the period selected for possible payment is <b>Period {{gf_chosen_period}}</b>.
+        Because your prediction {{ if gf_predictions_payoffs == 0 }} was not correct, you do not receive an additional payoff of {{1 | c}}. {{else}}
+        was correct, you receive  an additional payoff of <b>{{gf_predictions_payoffs}}</b> on top. {{endif}}
+
+        </p>
+
+        {{endif}}
+        <br>
+
+        <h4>Summary</h4>
+
+        <p>
+            <table class="table table-striped table-borderless w-50">
+            <thead>
+            <th class="table-dark text-center" colspan="2">Your payoff</th>
+            </thead>
+            <tbody>
+            {{if guess_two_thirds}}
+            <tr>
+                <td>Task {{guess_two_thirds_task_number}}: Pick a number</td>
+                <td>{{guess_my_payoff}}</td>
+            </tr>
+            {{endif}}
+            {{if gf_game}}
+            <tr>
+                <td>Task {{gf_task_number}}: Markets</td>
+                <td>{{gf_market_plus_prediction}}</td>
+            </tr>
+            {{endif}}
+            <tr class="border-top">
+                <td><b>Total:</b></td>
+                <td><b>{{participant_total_payoff}}<b/></td>
+            </tr>
+
+            </tbody>
+
+    </table>
+
+        </p>
+</div>
+</div>
+<br>
+
+<button class="btn btn-primary">Continue</button>
 
 
 {{ endblock }}
+
 

@@ -13,9 +13,11 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = 3
     NUM_ROUNDS = 1
     NAME_IN_URL = 'guess_two_thirds'
-    JACKPOT = Currency(100)
+    JACKPOT = Currency(5)
+    ENDOWMENT_UPCOMING_APP = Currency(12)
     GUESS_MAX = 100
     INSTRUCTIONS_TEMPLATE = 'guess_two_thirds/instructions.html'
+    GAMESTART_TEMPLATE = 'guess_two_thirds/GameStart_template.html'
 
 
 class Subsession(BaseSubsession):
@@ -48,16 +50,33 @@ def set_payoffs(group: Group):
         p.is_winner = True
         p.payoff = C.JACKPOT / group.num_winners
 
+    # store everything for upcoming apps
+    for p in group.get_players():
+        p.participant.vars["guess_group_id"] = p.group.id_in_subsession,
+        p.participant.vars["guess_group_my_id"] = p.id_in_group,
+        p.participant.vars["guess_my_guess"] = p.guess,
+        p.participant.vars["guess_group_guesses"] = sorted([p.guess for p in group.get_players()]),
+        p.participant.vars["guess_group_two_thirds"] = group.two_thirds_avg,
+        p.participant.vars["guess_best_guess"] = group.best_guess,
+        p.participant.vars["guess_is_winner"] = p.guess == group.best_guess,
+        p.participant.vars["guess_my_payoff"] = p.payoff,
+
+
 
 def two_thirds_avg_history(group: Group):
     return [g.two_thirds_avg for g in group.in_previous_rounds()]
 
 
 # PAGES
+
+class GroupingWaitePage(WaitPage):
+    group_by_arrival_time = True
+
 class Introduction(Page):
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == 1
+
 
 
 class Guess(Page):
@@ -68,11 +87,18 @@ class Guess(Page):
     def vars_for_template(player: Player):
         group = player.group
 
-        return dict(two_thirds_avg_history=two_thirds_avg_history(group))
+        return {
+            "two_thirds_avg_history": two_thirds_avg_history(group),
+        }
+
+
 
 
 class ResultsWaitPage(WaitPage):
-    after_all_players_arrive = set_payoffs
+
+    def after_all_players_arrive(group: Group): set_payoffs(group)
+
+
 
 
 class Results(Page):
@@ -81,7 +107,9 @@ class Results(Page):
         group = player.group
 
         sorted_guesses = sorted(p.guess for p in group.get_players())
-        return dict(sorted_guesses=sorted_guesses)
+        return {
+            "sorted_guesses":sorted_guesses,
+        }
 
 
-page_sequence = [Introduction, Guess, ResultsWaitPage]
+page_sequence = [GroupingWaitePage,Introduction, Guess, ResultsWaitPage]

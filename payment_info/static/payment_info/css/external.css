@@ -1,0 +1,144 @@
+/* Remove the navbar's default margin-bottom and rounded borders */
+.navbar {
+    margin-bottom: 0;
+    border-radius: 0;
+}
+
+.navbar>.container-fluid {
+    display: block;
+}
+
+.container {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+#navbar-head {
+    font-size: 30px;
+    color: white;
+
+}
+
+.navbar-inverse{
+    background-color: #003361
+}
+
+
+#Welcome {
+    padding-top: 3rem;
+}
+
+#Help {
+    padding-left: 2px;
+}
+
+.btn-primary {
+    background-color: #003361;
+    border-color: #003361;
+}
+
+.btn-primary:hover {
+    background-color: #f39200;
+    border-color: #f39200;
+}
+
+/* Loader
+/* Center the loader */
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #003361;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 }
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom {
+  from{ bottom:-100px; opacity:0 }
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+  text-align: center;
+}
+
+
+/* On small screens, set height to 'auto' for sidenav and grid */
+@media screen and (max-width: 767px) {
+    .sidenav {
+        height: auto;
+        padding: 15px;
+    }
+
+    .row.content {
+        height: auto;
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar {
+        border-radius: 0px;
+    }
+}
+
+@media (min-width: 992px) {
+    .container {
+    width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+    width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 576px) {
+    .container {
+    width: 100%;
+        max-width: 100%;
+    }
+}
+
+.otree-body{
+    max-width: 100%;
+}
+
+.image_resize {
+    width: 200px;
+    height: auto;
+}
+

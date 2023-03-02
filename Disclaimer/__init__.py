@@ -1,7 +1,4 @@
 from otree.api import *
-import sys
-sys.path.append("..")
-from experiment.settings import SESSION_CONFIG_DEFAULTS
 
 
 doc = """

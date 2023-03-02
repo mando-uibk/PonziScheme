@@ -14,9 +14,7 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
     DISCLAIMER_TEMPLATE = 'Disclaimer/Disclaimer_Text.html'
-    NEXT_APP = "TheEnd"
-    conversion_rate = SESSION_CONFIG_DEFAULTS["real_world_currency_per_point"]
-    participation_fee = SESSION_CONFIG_DEFAULTS["participation_fee"]
+
 
 
 class Subsession(BaseSubsession):
@@ -46,8 +44,6 @@ class Disclaimer(Page):
 
     def vars_for_template(player: Player):
         return {
-            "conversion_rate": '{:.2f}'.format(C.conversion_rate),
-            "participation_fee": '{:.2f}'.format(C.participation_fee),
         }
 
     def app_after_this_page(player: Player, upcoming_apps):

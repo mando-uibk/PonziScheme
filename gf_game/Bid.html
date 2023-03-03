@@ -180,7 +180,7 @@
             {{ endif }}
         {{endif}}
             {{ if uncertainty == 'RISK' }}
-                {{if not once_got_token and not got_token}}
+                {{if information == 'SYMMETRIC' or not once_got_token and not got_token}}
                     It is {{H_value}} only if three dice (showing the numbers 1 to 6 with equal
                     probability) all show 6 at the same time.
                 {{endif}}

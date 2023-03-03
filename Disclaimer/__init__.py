@@ -23,10 +23,7 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    q_agree = models.IntegerField(widget=widgets.RadioSelect,
-                                  label="How do you wish to proceed?",
-                                  choices=[[1, "I agree and want to participate"],
-                                           [0, "I disagree and do not want to participate"]])
+    q_agree = models.IntegerField()
 
 # FUNCTIONS
 def set_continue(player: Player):
@@ -41,6 +38,7 @@ class Disclaimer(Page):
 
     def vars_for_template(player: Player):
         return {
+            'q_agree': 'q_agree'
         }
 
     def app_after_this_page(player: Player, upcoming_apps):

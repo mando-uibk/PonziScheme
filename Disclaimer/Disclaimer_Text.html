@@ -27,18 +27,20 @@
         <br/>
 
         <div id="survey" class="content">
-            <table class="table">
+            <table class="table table-borderless">
                 <tr class="question">
-                    <th colspan="1">{{ form.q_agree.label }}</th>
+                    <th colspan="1">How do you wish to proceed?</th>
                 </tr>
-                {{ for choice in form.q_agree }}
                 <tr>
-                    <td class="verticalChoice">
-                        <span class="radio">{{ choice }}</span>
-                        <label for={{ choice.id }}>{{ choice.label }}</label>
+                    <td class="verticalChoice mx">
+                        <input type="radio" name="q_agree" value="1"> <span class="fst-italic">I agree and want to participate </span>
                     </td>
                 </tr>
-                {{ endfor }}
+                <tr>
+                    <td class="verticalChoice mx-auto">
+                        <input type="radio" name="q_agree" value="0"> <span class="fst-italic"> I disagree and do not want to participate</span>
+                    </td>
+                </tr>
             </table>
         </div>
         </p>
